@@ -638,7 +638,7 @@ function receive (log, state, maxSize, request, response, data) {
 }
 
 function send (log, state, remoteAddress, validator, filter, mapper, forwarder, request, response) {
-    var data, referer, userAgent, clientSourceIP, mappedData;
+    var data, referer, userAgent, originalRemoteAddress, mappedData;
 
     if (state.failed) {
         return;
@@ -648,13 +648,13 @@ function send (log, state, remoteAddress, validator, filter, mapper, forwarder, 
         data = parseData(request, state);
         referer = request.headers.referer;
         userAgent = request.headers['user-agent'];
-        clientSourceIP = request.headers['client_sourceip'];
+        originalRemoteAddress = request.headers['client_sourceip'];
 
         if (!validator(data, referer, userAgent, remoteAddress)) {
             throw null;
         }
 
-        mappedData = mapper(filter(data), referer, userAgent, remoteAddress, clientSourceIP);
+        mappedData = mapper(filter(data), referer, userAgent, originalRemoteAddress, remoteAddress);
         if (mappedData === '') {
             return pass(log, response, 204, 0);
         }

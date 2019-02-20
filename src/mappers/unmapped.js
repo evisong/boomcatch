@@ -31,14 +31,14 @@ module.exports = {
     type: 'json'
 };
 
-function map (data, referer, userAgent, remoteAddress, clientSourceIP) {
+function map (data, referer, userAgent, remoteAddress, originalRemoteAddress) {
     return JSON.stringify({
         data: data,
         referer: referer,
         userAgent: userAgent,
         browser: getBrowser(userAgent),
         remoteAddress: remoteAddress,
-        clientSourceIP: clientSourceIP
+        originalRemoteAddress: originalRemoteAddress
     });
 }
 
