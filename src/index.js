@@ -733,5 +733,5 @@ function getIp(req) {
       ip = ip.substring(0, ip.indexOf(','));
     }
   
-    return ip.trim();
+    return ip && ip.trim();
   }
