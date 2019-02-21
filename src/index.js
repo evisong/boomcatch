@@ -648,7 +648,7 @@ function send (log, state, remoteAddress, validator, filter, mapper, forwarder, 
         data = parseData(request, state);
         referer = request.headers.referer;
         userAgent = request.headers['user-agent'];
-        originalRemoteAddress = getIp(request);
+        originalRemoteAddress = getClientSourceIp(request);
 
         if (!validator(data, referer, userAgent, remoteAddress)) {
             throw null;
@@ -707,36 +707,22 @@ function pass (log, response, status, bytes) {
 }
 
 /**
- * Get request IP address. Prefer NetScaler `Client_SourceIP` header if existed.
- *
- * Derived from https://github.com/expressjs/morgan/blob/master/index.js#L465
+ * If there are multiple IPs in this header, only return the 1st one.
  *
  * @private
  * @param {IncomingMessage} req
  * @return {string}
  */
-function getIp(req) {
-    return getClientSourceIp(req) ||
-      req.ip ||
-      req._remoteAddress ||
-      (req.connection && req.connection.remoteAddress) ||
-      undefined;
-  }
-  
-  /**
-   * If there are multiple IPs in this header, only return the 1st one.
-   *
-   * @private
-   * @param {IncomingMessage} req
-   * @return {string}
-   */
-  function getClientSourceIp(req) {
-    let ip = req.headers['Client_SourceIP'.toLowerCase()];
-  
-    if (ip && ip.indexOf(',') !== -1) {
-      ip = ip.substring(0, ip.indexOf(','));
-    }
-  
-    return ip;
-  }
+function getClientSourceIp(req) {
+    var ip = req.headers['Client_SourceIP'.toLowerCase()];
 
+    if (ip && ip.indexOf(',') !== -1) {
+        ip = ip.substring(0, ip.indexOf(','));
+    }
+    
+    if (ip) {
+        return ip.trim();
+    } else {
+        return getRemoteAddress(req);
+    }
+}
