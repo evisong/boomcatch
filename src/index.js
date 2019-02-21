@@ -716,11 +716,7 @@ function pass (log, response, status, bytes) {
  * @return {string}
  */
 function getIp(req) {
-    return getClientSourceIp(req) ||
-      req.ip ||
-      req._remoteAddress ||
-      (req.connection && req.connection.remoteAddress) ||
-      undefined;
+    return getClientSourceIp(req) || getRemoteAddress(req);
   }
   
   /**
@@ -737,6 +733,5 @@ function getIp(req) {
       ip = ip.substring(0, ip.indexOf(','));
     }
   
-    return ip;
+    return ip.trim();
   }
-
