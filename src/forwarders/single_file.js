@@ -27,11 +27,16 @@ exports.initialise = function (options) {
     return send.bind(null, options.fwdDir);
 };
 
+function getEnvLocale(env) {
+    env = env || process.env;
+    return env.LC_ALL || env.LC_MESSAGES || env.LANG || env.LANGUAGE;
+}
+
 function send (directory, data, type, separator, callback) {
     try {
         fs.appendFile(
             path.join(directory, 'boomcatch-log.' + extensions[type || 'default']),
-            data + '\n',
+            new Date().toLocaleString() + ' ' + data + '\n',
             function (error) {
                 callback(error, data.length);
             }
