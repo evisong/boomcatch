@@ -29,9 +29,11 @@ exports.initialise = function (options) {
 
 function send (directory, data, type, separator, callback) {
     try {
+        var dataObj = JSON.parse(data);
+        dataObj['log.time'] = new Date().toLocaleString();
         fs.appendFile(
             path.join(directory, 'boomcatch-log.' + extensions[type || 'default']),
-            new Date().toLocaleString() + ' ' + data + '\n',
+            JSON.stringify(dataObj) + '\n',
             function (error) {
                 callback(error, data.length);
             }
