@@ -31,7 +31,7 @@ function send (directory, data, type, separator, callback) {
         var newData = data;
         if (type === 'json') {
             var dataObj = JSON.parse(data);
-            dataObj['logTime'] = new Date().toUTCString();
+            dataObj['logTime'] = new Date().toJSON();
             newData = JSON.stringify(dataObj);
         }
         fs.appendFile(
