@@ -29,11 +29,15 @@ exports.initialise = function (options) {
 
 function send (directory, data, type, separator, callback) {
     try {
-        var dataObj = JSON.parse(data);
-        dataObj['log.time'] = new Date().toLocaleString();
+        var newData = data;
+        if (type === 'json') {
+            var dataObj = JSON.parse(data);
+            dataObj['logTime'] = new Date().toUTCString();
+            newData = JSON.stringify(dataObj);
+        }
         fs.appendFile(
-            path.join(directory, 'boomcatch-log.' + extensions[type || 'default']),
-            JSON.stringify(dataObj) + '\n',
+            path.join(directory, 'boomcatch-beacon.log'),
+            newData + '\n',
             function (error) {
                 callback(error, data.length);
             }
@@ -42,10 +46,3 @@ function send (directory, data, type, separator, callback) {
         callback(error);
     }
 }
-
-extensions = {
-    json: 'json',
-    html: 'html',
-    default: 'json'
-};
-
