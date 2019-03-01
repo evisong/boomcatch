@@ -250,6 +250,9 @@ function verifyForwarderOptions (options) {
         case 'file':
             verifyDirectory(options.fwdDir, 'Invalid forwarding directory');
             break;
+        case 'single_file':
+            verifyDirectory(options.fwdDir, 'Invalid forwarding directory');
+            break;
         case 'http':
             check.assert.match(options.fwdUrl, urlRegex);
             check.assert.maybe.unemptyString(options.fwdMethod, 'Invalid forwarding method');
