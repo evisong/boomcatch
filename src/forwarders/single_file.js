@@ -20,8 +20,7 @@
 'use strict';
 
 var fs = require('fs'),
-    path = require('path'),
-    extensions;
+    path = require('path')
 
 exports.initialise = function (options) {
     return send.bind(null, options.fwdDir);
